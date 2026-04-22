@@ -13,7 +13,7 @@ body {
 }
 .app-container {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
 }
 .sidebar {
   width: 296px;
@@ -22,12 +22,18 @@ body {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  overflow-y: auto;
+  border-right: 2px solid #e8f0ef;
+}
+.sidebar::-webkit-scrollbar {
+  display: none;
 }
 .main-content {
   display: flex;
   flex-direction: column;
   flex: 1;
-  background-color: #e8f0ef;
+   background-color: #e8f0ef;
+  /* background-color: #e8f0ef; */
 }
 .sidebar-nav {
   display: flex;
@@ -96,4 +102,45 @@ body {
 .tag-item:hover {
   background-color: #e8f0ef;
   cursor: pointer;
+}
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  border-bottom: 2px solid #e8f0ef;
+  background-color: white;
+}
+.search-bar {
+  max-width: 320px;
+  width: 100%;
+  border: 2px #e8f0ef solid;
+  border-radius: 8px;
+  padding: 13px;
+  display: flex;
+  align-items: center;
+}
+.search-bar input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  font-family: inherit;
+}
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.add-bookmark-btn {
+  background-color: #014745;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.profile-cnt img {
+  width: 48px;
+  height: 48px;
 }
