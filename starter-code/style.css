@@ -175,4 +175,57 @@ body {
 }
 .bookmark-container {
   margin-top: 24px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.bookmark-card {
+  max-width: 338px;
+  width: 100%;
+  border-radius: 16px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+.card-main-cnt {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.card-logo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.org-logo {
+  border: 1px grey solid;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 50px;
+  height: 50px;
+  padding: 4px;
+}
+.org-title {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.org-logo img {
+  width: 100%;
+  display: block;
+}
+.org-title h3 {
+  font-weight: 550;
+}
+.org-title span {
+  font-weight: 200;
+}
+.edit-dtls {
+  border: 1px grey solid;
+  border-radius: 8px;
 }
