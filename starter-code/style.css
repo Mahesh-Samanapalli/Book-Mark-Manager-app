@@ -180,7 +180,7 @@ body {
   flex-wrap: wrap;
 }
 .bookmark-card {
-  max-width: 338px;
+  max-width: 352px;
   width: 100%;
   border-radius: 16px;
   background-color: white;
@@ -191,16 +191,19 @@ body {
   display: flex;
   flex-direction: column;
   padding: 16px;
+  gap: 16px;
 }
 .card-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e8f0ef;
 }
 .card-logo {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 }
 .org-logo {
   border: 1px grey solid;
@@ -220,12 +223,53 @@ body {
   display: block;
 }
 .org-title h3 {
-  font-weight: 550;
+  font-family: "Manrope", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #0f1f1e;
 }
 .org-title span {
-  font-weight: 200;
+  font-family: "Manrope", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #5f6c6b;
 }
 .edit-dtls {
   border: 1px grey solid;
   border-radius: 8px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-content p {
+  font-family: "Manrope", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #526261;
+}
+.card-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background-color: #e8f0ef;
+  color: #3f4f4e;
+  font-family: "Manrope", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+}
+.card-footer {
+  border-top: 1px solid #e8f0ef;
 }
