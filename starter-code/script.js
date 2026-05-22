@@ -23,5 +23,8 @@ fetchBookmarks();
 
 function renderBookmarks(bookmarks) {
     console.log("dynamically rendering bookmarks");
+    for(let i=0;i<bookmarks.length;i++){
+        console.log(bookmarks[i]);
+    }
 }
 
