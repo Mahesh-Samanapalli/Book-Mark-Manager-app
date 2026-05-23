@@ -14,6 +14,7 @@ async function fetchBookmarks() {
     // Call the function to render bookmarks
     // renderBookmarks(bookmarks)''
     renderBookmarksFn(bookmarks);
+    getAllTags(bookmarks);
   } catch (error) {
     console.error("Error fetching bookmarks:", error);
   }
@@ -154,4 +155,33 @@ function createBookmarkCard(bookmark) {
 
 function createTags(tags) {
   return tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
+}
+
+// dynamically render sidebar tags using the normal approach 
+
+//Brute force approach to get all unique tags and their count
+function getAllTags(bookmarks){
+    const allTags = bookmarks.map((bookmark)=>bookmark.tags);
+    const flattenedTags = [];
+    const tagsCount = [];
+    allTags.forEach((tags)=>{
+        tags.forEach((tag)=>{
+            flattenedTags.push(tag);
+        })
+    })
+    const uniqueTags = [];
+    flattenedTags.forEach((tag)=>{
+        if(!uniqueTags.includes(tag)){
+            uniqueTags.push(tag);
+        }
+    })
+    console.log(uniqueTags);
+    console.log(flattenedTags);
+
+    uniqueTags.forEach((tag)=>{
+        let tagCount = flattenedTags.filter((t)=>t === tag).length;
+        tagsCount.push({tagName:tag,count:tagCount});
+    })
+    console.log(tagsCount);
+
 }
