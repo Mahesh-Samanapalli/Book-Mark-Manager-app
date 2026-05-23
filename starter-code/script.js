@@ -12,7 +12,8 @@ async function fetchBookmarks() {
     const bookmarks = data.bookmarks;
     console.log(bookmarks);
     // Call the function to render bookmarks
-    renderBookmarks(bookmarks);
+    // renderBookmarks(bookmarks)''
+    renderBookmarksFn(bookmarks);
   } catch (error) {
     console.error("Error fetching bookmarks:", error);
   }
@@ -89,4 +90,68 @@ function formatDate(dateString) {
     day: "2-digit",
     month: "short",
   });
+}
+
+// fetch renderBookmarks with functional programming approach
+
+function renderBookmarksFn(bookmarks) {
+  const cardsHtml = bookmarks.map((bookmark) => createBookmarkCard(bookmark)).join("");
+
+  bookmarkContainer.innerHTML = cardsHtml;
+}
+
+function createBookmarkCard(bookmark) {
+  return `<div class="bookmark-card">
+              <div class="card-main-cnt">
+                <div class="card-header">
+                  <div class="card-logo">
+                    <div class="org-logo">
+                      <img
+                        src="${bookmark.favicon}"
+                        alt="${bookmark.title}"
+                      />
+                    </div>
+                    <div class="org-title">
+                      <h3>${bookmark.title}</h3>
+                      <span>${bookmark.url}</span>
+                    </div>
+                  </div>
+                  <div class="edit-dtls">
+                    <img src="./assets/images/icon-menu-bookmark.svg" alt="" />
+                  </div>
+                </div>
+                <div class="card-content">
+                  <p>
+                    ${bookmark.description}
+                  </p>
+                </div>
+                <div class="card-tags"> 
+                 ${createTags(bookmark.tags)}
+                 </div>
+              </div>
+              <div class="card-footer">
+                <div class="card-details">
+                  <div class="footer-item card-view-count">
+                    <img src="./assets/images/icon-visit-count.svg" alt="" />
+                    <span>${bookmark.visitCount}</span>
+                  </div>
+                  <div class="footer-item card-last-seen">
+                    <img src="./assets/images/icon-last-visited.svg" alt="" />
+                    <span>${formatDate(bookmark.lastVisited)}</span>
+                  </div>
+                  <div class="footer-item card-published">
+                    <img src="./assets/images/icon-created.svg" alt="" />
+                    <span>${formatDate(bookmark.createdAt)}</span>
+                  </div>
+                </div>
+                <div class="card-status">
+                   ${bookmark.pinned ? `<img src="./assets/images/icon-pin.svg" alt="">` : ""}
+                </div>
+              </div>
+            </div>`;
+         
+}
+
+function createTags(tags) {
+  return tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
 }
