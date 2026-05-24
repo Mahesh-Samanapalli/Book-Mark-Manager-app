@@ -1,4 +1,5 @@
 const bookmarkContainer = document.getElementById("bookmarkContainer");
+const sidebarContainer = document.getElementById("sidebarContainer");
 async function fetchBookmarks() {
   try {
     // Fetch the data from the JSON file
@@ -14,7 +15,7 @@ async function fetchBookmarks() {
     // Call the function to render bookmarks
     // renderBookmarks(bookmarks)''
     renderBookmarksFn(bookmarks);
-    getAllTags(bookmarks);
+    rendersidebarTags(bookmarks);
   } catch (error) {
     console.error("Error fetching bookmarks:", error);
   }
@@ -96,7 +97,9 @@ function formatDate(dateString) {
 // fetch renderBookmarks with functional programming approach
 
 function renderBookmarksFn(bookmarks) {
-  const cardsHtml = bookmarks.map((bookmark) => createBookmarkCard(bookmark)).join("");
+  const cardsHtml = bookmarks
+    .map((bookmark) => createBookmarkCard(bookmark))
+    .join("");
 
   bookmarkContainer.innerHTML = cardsHtml;
 }
@@ -150,38 +153,70 @@ function createBookmarkCard(bookmark) {
                 </div>
               </div>
             </div>`;
-         
 }
 
 function createTags(tags) {
   return tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
 }
 
-// dynamically render sidebar tags using the normal approach 
+// dynamically render sidebar tags using the normal approach
 
 //Brute force approach to get all unique tags and their count
-function getAllTags(bookmarks){
-    const allTags = bookmarks.map((bookmark)=>bookmark.tags);
-    const flattenedTags = [];
-    const tagsCount = [];
-    allTags.forEach((tags)=>{
-        tags.forEach((tag)=>{
-            flattenedTags.push(tag);
-        })
-    })
-    const uniqueTags = [];
-    flattenedTags.forEach((tag)=>{
-        if(!uniqueTags.includes(tag)){
-            uniqueTags.push(tag);
-        }
-    })
-    console.log(uniqueTags);
-    console.log(flattenedTags);
+function getAllTags(bookmarks) {
+  const allTags = bookmarks.map((bookmark) => bookmark.tags);
+  const flattenedTags = [];
+  const tagsCount = [];
+  allTags.forEach((tags) => {
+    tags.forEach((tag) => {
+      flattenedTags.push(tag);
+    });
+  });
+  const uniqueTags = [];
+  flattenedTags.forEach((tag) => {
+    if (!uniqueTags.includes(tag)) {
+      uniqueTags.push(tag);
+    }
+  });
+  console.log(uniqueTags);
+  console.log(flattenedTags);
 
-    uniqueTags.forEach((tag)=>{
-        let tagCount = flattenedTags.filter((t)=>t === tag).length;
-        tagsCount.push({tagName:tag,count:tagCount});
-    })
-    console.log(tagsCount);
+  uniqueTags.forEach((tag) => {
+    let tagCount = flattenedTags.filter((t) => t === tag).length;
+    tagsCount.push({ tagName: tag, count: tagCount });
+  });
+  console.log(tagsCount);
+}
 
+// Normal approach to get  all unique tags and their count
+function rendersidebarTags(bookmarks) {
+  const tagCountMap = getTagsCount(bookmarks);
+  let sidebarHtml = "";
+  for (let tag in tagCountMap) {
+    sidebarHtml += `<div class="tag-item">
+            <div class="tag-item-cnt">
+              <input type="checkbox" />
+              <span>${tag}</span>
+            </div>
+            <div class="tag-item-count">
+              <span>${tagCountMap[tag]}</span>
+            </div>
+          </div>
+    `;
+  }
+  sidebarContainer.innerHTML = sidebarHtml;
+}
+function getTagsCount(bookmarks) {
+  const tagCountMap = {};
+  bookmarks.forEach((bookmark) => {
+    bookmark.tags.forEach((tag) => {
+      if (tagCountMap[tag]) {
+        tagCountMap[tag]++;
+      } else {
+        tagCountMap[tag] = 1;
+      }
+    });
+  });
+  // const tagsCount = Object.keys(tagCountMap).map((tag)=>({tagName:tag,count:tagCountMap[tag]}));
+  // console.log(tagsCount);
+  return tagCountMap;
 }
