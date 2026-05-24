@@ -1,5 +1,7 @@
 const bookmarkContainer = document.getElementById("bookmarkContainer");
 const sidebarContainer = document.getElementById("sidebarContainer");
+const searchInput = document.getElementById("searchInput");
+let bookmarks = []; // Global variable to store bookmarks data
 async function fetchBookmarks() {
   try {
     // Fetch the data from the JSON file
@@ -10,7 +12,7 @@ async function fetchBookmarks() {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    const bookmarks = data.bookmarks;
+    bookmarks = data.bookmarks;
     console.log(bookmarks);
     // Call the function to render bookmarks
     // renderBookmarks(bookmarks)''
@@ -194,7 +196,7 @@ function rendersidebarTags(bookmarks) {
   for (let tag in tagCountMap) {
     sidebarHtml += `<div class="tag-item">
             <div class="tag-item-cnt">
-              <input type="checkbox" />
+              <input type="checkbox" value="${tag}" />
               <span>${tag}</span>
             </div>
             <div class="tag-item-count">
@@ -220,3 +222,22 @@ function getTagsCount(bookmarks) {
   // console.log(tagsCount);
   return tagCountMap;
 }
+
+// SEARCH FUNCTIONALITY
+
+// Normal approach to filter bookmarks based on search input
+searchInput.addEventListener("input", function (event) {
+  const searchTerm = event.target.value.toLowerCase().trim();
+  
+  let filterbookmarks =[];
+  for(let i=0;i<bookmarks.length;i++){
+    if(bookmarks[i].title.toLowerCase().includes(searchTerm)){
+      filterbookmarks.push(bookmarks[i]);
+    }
+  }
+  console.log(searchTerm);
+  console.log(filterbookmarks);
+  renderBookmarksFn(filterbookmarks);
+ 
+});
+
