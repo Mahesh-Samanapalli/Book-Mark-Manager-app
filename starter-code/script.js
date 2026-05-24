@@ -228,16 +228,19 @@ function getTagsCount(bookmarks) {
 // Normal approach to filter bookmarks based on search input
 searchInput.addEventListener("input", function (event) {
   const searchTerm = event.target.value.toLowerCase().trim();
-  
-  let filterbookmarks =[];
-  for(let i=0;i<bookmarks.length;i++){
-    if(bookmarks[i].title.toLowerCase().includes(searchTerm)){
+
+  if (searchTerm === "") {
+    renderBookmarksFn(bookmarks);
+    return;
+  }
+
+  let filterbookmarks = [];
+  for (let i = 0; i < bookmarks.length; i++) {
+    if (bookmarks[i].title.toLowerCase().includes(searchTerm)) {
       filterbookmarks.push(bookmarks[i]);
     }
   }
   console.log(searchTerm);
   console.log(filterbookmarks);
   renderBookmarksFn(filterbookmarks);
- 
 });
-
