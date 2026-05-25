@@ -244,3 +244,10 @@ searchInput.addEventListener("input", function (event) {
   console.log(filterbookmarks);
   renderBookmarksFn(filterbookmarks);
 });
+
+function tagSearchFn(searchTerm) {
+  const filterbookmarks = bookmarks.filter((bookmark) =>
+    bookmark.tags.some((tag) => tag.toLowerCase() === searchTerm.toLowerCase())
+  );
+  renderBookmarksFn(filterbookmarks);
+}
