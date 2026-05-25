@@ -184,7 +184,7 @@ body {
 .bookmark-container {
   margin-top: 24px;
   display: flex;
-  gap: 16px;
+  gap: 35px;
   flex-wrap: wrap;
   align-items: stretch;
 }
