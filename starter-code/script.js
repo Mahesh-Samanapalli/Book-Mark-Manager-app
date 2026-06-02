@@ -251,3 +251,10 @@ function tagSearchFn(searchTerm) {
   );
   renderBookmarksFn(filterbookmarks);
 }
+sidebarContainer.addEventListener("change", function (event) {
+  const target = event.target;
+  if (!target.matches('input[type="checkbox"]')) return; // ignore other changes
+  const searchTerm = target.value;
+  console.log("tag changed:", searchTerm);
+  tagSearchFn(searchTerm); // call your tag filtering
+});
