@@ -262,4 +262,12 @@ sidebarContainer.addEventListener("change", function (event) {
     }
   });
   console.log(selectedTags);
+  if(selectedTags.length === 0){
+    renderBookmarksFn(bookmarks);
+    return;
+  }
+  const selectedTagsBookmarks= bookmarks.filter((bookmark) =>
+    bookmark.tags.some((tag) => selectedTags.includes(tag))
+  );
+  renderBookmarksFn(selectedTagsBookmarks);
 });
