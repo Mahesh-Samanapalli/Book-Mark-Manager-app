@@ -196,7 +196,7 @@ function rendersidebarTags(bookmarks) {
   for (let tag in tagCountMap) {
     sidebarHtml += `<div class="tag-item">
             <div class="tag-item-cnt">
-              <input type="checkbox" value="${tag}" />
+              <input type="checkbox" value="${tag}" class="tag-checkbox"/>
               <span>${tag}</span>
             </div>
             <div class="tag-item-count">
@@ -253,8 +253,13 @@ function tagSearchFn(searchTerm) {
 }
 sidebarContainer.addEventListener("change", function (event) {
   const target = event.target;
-  if (!target.matches('input[type="checkbox"]')) return; // ignore other changes
-  const searchTerm = target.value;
-  console.log("tag changed:", searchTerm);
-  tagSearchFn(searchTerm); // call your tag filtering
+  console.log(target);
+  let selectedTags =[];
+  if (!target.matches('.tag-checkbox')) return; // ignore other changes
+  document.querySelectorAll('.tag-checkbox').forEach((checkbox) => {
+    if(checkbox.checked){
+      selectedTags.push(checkbox.value);
+    }
+  });
+  console.log(selectedTags);
 });
