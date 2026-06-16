@@ -1,6 +1,7 @@
 const bookmarkContainer = document.getElementById("bookmarkContainer");
 const sidebarContainer = document.getElementById("sidebarContainer");
 const searchInput = document.getElementById("searchInput");
+const sortByBtn = document.getElementById("sortBy-btn");
 let bookmarks = []; // Global variable to store bookmarks data
 async function fetchBookmarks() {
   try {
@@ -270,4 +271,16 @@ sidebarContainer.addEventListener("change", function (event) {
     bookmark.tags.some((tag) => selectedTags.includes(tag))
   );
   renderBookmarksFn(selectedTagsBookmarks);
+});
+
+sortByBtn.addEventListener("click", function () {
+  const sortOptions = document.querySelector(".sortBy-options");
+  sortOptions.classList.toggle("active");
+});
+// Handling the outside click for sort by options dropdown
+document.addEventListener("click", function (event) {
+  const sortOptions = document.querySelector(".sortBy-options");
+  if (!sortByBtn.contains(event.target) && !sortOptions.contains(event.target)) {
+    sortOptions.classList.remove("active");
+  }
 });
