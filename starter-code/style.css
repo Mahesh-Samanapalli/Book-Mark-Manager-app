@@ -352,12 +352,16 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;  
 }
-.filter-btns-btn span {
+.check-icon {
   font-size: 12px;
   color: #d3074b;
   display:none; 
 }
 .sortBy-options.active {
   display:block;
+}
+.filter-btns-btn.active .check-icon {
+  display:inline;
 }

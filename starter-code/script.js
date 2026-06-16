@@ -288,19 +288,23 @@ document.addEventListener("click", function (event) {
 
 //SORT FUNCTIONALITY
 sortByOptions.addEventListener("click", function(event){
-  const target = event.target;
-  if(!target.matches('.filter-btns-btn')) return;
+ const btn = event.target.closest('.filter-btns-btn')  // always the button
+  if(!btn) return
 
   const sortValues =['recently_added','recently_visited','most_visited'];
+  document.querySelectorAll('.filter-btns-btn').forEach((btn) => {
+    btn.classList.remove('active');
+  });
+  btn.classList.add('active');
 
-  if(!sortValues.includes(target.value)) return;
+  if(!sortValues.includes(btn.value)) return;
 
   let sortedBookmarks = [...bookmarks];
-  if(target.value === 'recently_added'){
+  if(btn.value === 'recently_added'){
     sortedBookmarks.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
-  } else if(target.value === 'recently_visited'){
+  } else if(btn.value === 'recently_visited'){
     sortedBookmarks.sort((a,b) => new Date(b.lastVisited) - new Date(a.lastVisited));
-  } else if(target.value === 'most_visited'){
+  } else if(btn.value === 'most_visited'){
     sortedBookmarks.sort((a,b) => b.visitCount - a.visitCount);
   }
   renderBookmarksFn(sortedBookmarks);
