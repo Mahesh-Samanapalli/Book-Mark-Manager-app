@@ -2,6 +2,7 @@ const bookmarkContainer = document.getElementById("bookmarkContainer");
 const sidebarContainer = document.getElementById("sidebarContainer");
 const searchInput = document.getElementById("searchInput");
 const sortByBtn = document.getElementById("sortBy-btn");
+const sortByOptions = document.getElementById("sortBy-options");
 let bookmarks = []; // Global variable to store bookmarks data
 async function fetchBookmarks() {
   try {
@@ -278,9 +279,29 @@ sortByBtn.addEventListener("click", function () {
   sortOptions.classList.toggle("active");
 });
 // Handling the outside click for sort by options dropdown
-document.addEventListener("click", function (event) {
+document.addEventListener("click", function (event) { 
   const sortOptions = document.querySelector(".sortBy-options");
   if (!sortByBtn.contains(event.target) && !sortOptions.contains(event.target)) {
     sortOptions.classList.remove("active");
   }
+});
+
+//SORT FUNCTIONALITY
+sortByOptions.addEventListener("click", function(event){
+  const target = event.target;
+  if(!target.matches('.filter-btns-btn')) return;
+
+  const sortValues =['recently_added','recently_visited','most_visited'];
+
+  if(!sortValues.includes(target.value)) return;
+
+  let sortedBookmarks = [...bookmarks];
+  if(target.value === 'recently_added'){
+    sortedBookmarks.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+  } else if(target.value === 'recently_visited'){
+    sortedBookmarks.sort((a,b) => new Date(b.lastVisited) - new Date(a.lastVisited));
+  } else if(target.value === 'most_visited'){
+    sortedBookmarks.sort((a,b) => b.visitCount - a.visitCount);
+  }
+  renderBookmarksFn(sortedBookmarks);
 });
