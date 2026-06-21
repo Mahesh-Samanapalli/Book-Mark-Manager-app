@@ -3,6 +3,11 @@ const sidebarContainer = document.getElementById("sidebarContainer");
 const searchInput = document.getElementById("searchInput");
 const sortByBtn = document.getElementById("sortBy-btn");
 const sortByOptions = document.getElementById("sortBy-options");
+const addBookmarkModal = document.getElementById("addBookmarkModal");
+const addBookmarkBtn = document.getElementById("addBookmarkBtn");
+const cancelBtn = document.getElementById("cancelBtn");
+const closeModalBtn = document.getElementById("closeBtn");
+
 let bookmarks = []; // Global variable to store bookmarks data
 async function fetchBookmarks() {
   try {
@@ -309,3 +314,16 @@ sortByOptions.addEventListener("click", function(event){
   }
   renderBookmarksFn(sortedBookmarks);
 });
+
+// ADD BOOKMARK MODAL FUNCTIONALITY
+addBookmarkBtn.addEventListener("click", function () {
+  addBookmarkModal.classList.add("active");
+});
+
+cancelBtn.addEventListener("click", closeAddBookmarkModal);
+
+closeModalBtn.addEventListener("click", closeAddBookmarkModal);
+
+function closeAddBookmarkModal(){
+  addBookmarkModal.classList.remove("active");
+}
