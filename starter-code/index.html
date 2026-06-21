@@ -44,7 +44,7 @@
           </div>
           <div class="user-profile">
             <div class="add-bookmark">
-              <button class="add-bookmark-btn">+ Add Bookmark</button>
+              <button class="add-bookmark-btn" id="addBookmarkBtn">+ Add Bookmark</button>
             </div>
             <div class="profile-cnt">
               <img src="./assets/images/image-avatar.webp" alt="" />
@@ -80,7 +80,7 @@
            <span class="close-btn" id="closeBtn">&times;</span>
         </div>
         <div class="modal-body">
-          <form id="addBookmarkForm">
+          <form id="addBookmarkForm" novalidate>
             <div class="form-group">
               <label for="title">Title <span class="required">*</span></label>
               <input type="text" id="title" name="title" required />
