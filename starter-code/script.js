@@ -7,6 +7,7 @@ const addBookmarkModal = document.getElementById("addBookmarkModal");
 const addBookmarkBtn = document.getElementById("addBookmarkBtn");
 const cancelBtn = document.getElementById("cancelBtn");
 const closeModalBtn = document.getElementById("closeBtn");
+const bookmarkForm = document.getElementById("addBookmarkForm");
 
 let bookmarks = []; // Global variable to store bookmarks data
 async function fetchBookmarks() {
@@ -327,3 +328,12 @@ closeModalBtn.addEventListener("click", closeAddBookmarkModal);
 function closeAddBookmarkModal(){
   addBookmarkModal.classList.remove("active");
 }
+
+bookmarkForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+  const title = document.getElementById("title").value.trim();
+  const description = document.getElementById("description").value.trim();
+  const websiteUrl = document.getElementById("websiteUrl").value.trim();
+  const tags = document.getElementById("tags").value.trim().split(",").map(tag => tag.trim());
+  console.log(title, description, websiteUrl, tags);
+});
