@@ -384,4 +384,16 @@ if (!description) {
  else {
   descriptionError.textContent = "";
 }
+// websiteUrl validation
+let webSiteUrlError = document.getElementById("websiteUrlError");
+if(!websiteUrl) {
+  webSiteUrlError.textContent = "Website URL is required";
+  isValid = false;
+} else if(!/^https?:\/\/.+$/.test(websiteUrl)) {
+  webSiteUrlError.textContent = "Please enter a valid website URL";
+  isValid = false;
+}
+else {
+  webSiteUrlError.textContent = "";
+}
 });
