@@ -328,7 +328,14 @@ closeModalBtn.addEventListener("click", closeAddBookmarkModal);
 function closeAddBookmarkModal(){
   addBookmarkModal.classList.remove("active");
 }
+const description = document.getElementById("description");
+description.addEventListener("input", function () {
+  const charCount = description.value.length;
+  const charCountElement = document.querySelector(".char-count");
+  charCountElement.textContent = `${charCount}/280`;
+});
 
+// Form validation and submission
 bookmarkForm.addEventListener("submit", function (event) {
   event.preventDefault();
   const title = document.getElementById("title").value.trim();
@@ -357,5 +364,24 @@ if (!title) {
   isValid = false;
 } else {
   titleError.textContent = "";
+}
+
+// validate the description input
+const descriptionError = document.getElementById("descriptionError");
+if (!description) {
+  descriptionError.textContent = "Description is required";
+  isValid = false;
+} else if(description.length < 10) {
+  descriptionError.textContent = "Description must be at least 10 characters";
+  isValid = false;
+} else if (description.length > 280) {
+  descriptionError.textContent = "Description must be under 280 characters";
+  isValid = false;
+} else if (/[<>]/.test(description)) {
+  descriptionError.textContent = "Description cannot contain < or > characters";
+  isValid = false;
+}
+ else {
+  descriptionError.textContent = "";
 }
 });
