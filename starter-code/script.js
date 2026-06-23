@@ -123,6 +123,7 @@ function createBookmarkCard(bookmark) {
                       <img
                         src="${bookmark.favicon}"
                         alt="${bookmark.title}"
+                        onerror="this.onerror=null; this.src='./assets/images/favicon-stack-overflow.png';"
                       />
                     </div>
                     <div class="org-title">
@@ -397,6 +398,14 @@ else {
   webSiteUrlError.textContent = "";
 }
 
+let favicon;
+try {
+  const domain = new URL(websiteUrl).hostname;
+  favicon = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+} catch {
+  favicon = "./assets/images/default-favicon.png"; // fallback
+}
+
 //Tags validation
 let tagsError = document.getElementById("tagsError");
 let hasDuplicate = tags.some((tag,index)=> tags.indexOf(tag) !== index);
@@ -414,5 +423,28 @@ let hasDuplicate = tags.some((tag,index)=> tags.indexOf(tag) !== index);
    tagsError.textContent ="";
  }
  
- // Form submission validationcd
-});
+ // Form submission validation
+ if (isValid) {
+  const bookmark = {
+    id: `bm-${Date.now()}`,
+    title,
+    url: websiteUrl,
+    favicon,
+    description,
+    tags,
+    pinned: false,
+    isArchived: false,
+    visitCount: 0,
+    createdAt: new Date().toISOString(),
+    lastVisited: null
+  };
+
+  bookmarks.push(bookmark);
+  closeAddBookmarkModal();
+  renderBookmarksFn(bookmarks);
+  rendersidebarTags(bookmarks);
+  bookmarkForm.reset();
+  document.querySelector(".char-count").textContent = "0/280";
+}
+}
+);
