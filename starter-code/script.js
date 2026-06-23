@@ -341,7 +341,7 @@ bookmarkForm.addEventListener("submit", function (event) {
   const title = document.getElementById("title").value.trim();
   const description = document.getElementById("description").value.trim();
   const websiteUrl = document.getElementById("websiteUrl").value.trim();
-  const tags = document.getElementById("tags").value.trim().split(",").map(tag => tag.trim());
+  const tags = document.getElementById("tags").value.trim().split(",").map(tag => tag.trim()).filter(tag => tag !== "")
   // Validate the form inputs
   // Validate the title input
 const titleError = document.getElementById("titleError");
@@ -384,4 +384,35 @@ if (!description) {
  else {
   descriptionError.textContent = "";
 }
+// websiteUrl validation
+let webSiteUrlError = document.getElementById("websiteUrlError");
+if(!websiteUrl) {
+  webSiteUrlError.textContent = "Website URL is required";
+  isValid = false;
+} else if(!/^https?:\/\/.+$/.test(websiteUrl)) {
+  webSiteUrlError.textContent = "Please enter a valid website URL";
+  isValid = false;
+}
+else {
+  webSiteUrlError.textContent = "";
+}
+
+//Tags validation
+let tagsError = document.getElementById("tagsError");
+let hasDuplicate = tags.some((tag,index)=> tags.indexOf(tag) !== index);
+ if(tags.length === 0){
+   tagsError.textContent = "Atleast one tag is required"
+   isValid =false;
+ } else if (hasDuplicate){
+   tagsError.textContent = "duplicate tags are not allowed ."
+   isValid = false;
+ } else if(tags.length>5){
+   tagsError.textContent = "Max 5 tags are allowed"
+   isValid = false;
+  }
+ else {
+   tagsError.textContent ="";
+ }
+ 
+ // Form submission validationcd
 });
