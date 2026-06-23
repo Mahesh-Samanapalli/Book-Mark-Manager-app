@@ -335,5 +335,27 @@ bookmarkForm.addEventListener("submit", function (event) {
   const description = document.getElementById("description").value.trim();
   const websiteUrl = document.getElementById("websiteUrl").value.trim();
   const tags = document.getElementById("tags").value.trim().split(",").map(tag => tag.trim());
-  console.log(title, description, websiteUrl, tags);
+  // Validate the form inputs
+  // Validate the title input
+const titleError = document.getElementById("titleError");
+let isValid = true;
+
+if (!title) {
+  titleError.textContent = "Title is required";
+  isValid = false;
+} else if (title.length < 3) {
+  titleError.textContent = "Title must be at least 3 characters";
+  isValid = false;
+} else if (title.length > 60) {
+  titleError.textContent = "Title must be under 60 characters";
+  isValid = false;
+} else if (/[<>]/.test(title)) {
+  titleError.textContent = "Title cannot contain < or > characters";
+  isValid = false;
+} else if (bookmarks.some(b => b.title.toLowerCase() === title.toLowerCase())) {
+  titleError.textContent = "A bookmark with this title already exists";
+  isValid = false;
+} else {
+  titleError.textContent = "";
+}
 });

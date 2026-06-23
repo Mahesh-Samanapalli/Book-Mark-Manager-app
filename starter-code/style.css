@@ -472,3 +472,8 @@ body {
 .addBookmarkModal.active {
   display: flex;
 }
+.error-msg {
+  color: #d3074b;
+  font-size: 12px;
+  margin-top: 4px;
+}
