@@ -328,9 +328,9 @@ closeModalBtn.addEventListener("click", closeAddBookmarkModal);
 function closeAddBookmarkModal(){
   addBookmarkModal.classList.remove("active");
 }
-const description = document.getElementById("description");
-description.addEventListener("input", function () {
-  const charCount = description.value.length;
+const descriptionInput = document.getElementById("description");
+descriptionInput.addEventListener("input", function () {
+  const charCount = descriptionInput.value.length;
   const charCountElement = document.querySelector(".char-count");
   charCountElement.textContent = `${charCount}/280`;
 });
