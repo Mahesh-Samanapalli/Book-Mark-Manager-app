@@ -133,6 +133,24 @@ function createBookmarkCard(bookmark) {
                   </div>
                   <div class="edit-dtls">
                     <img src="./assets/images/icon-menu-bookmark.svg" alt="" />
+                    <div class="card-actions-menu">
+                         <button class="action-item">
+                           <img src="./assets/images/icon-visit.svg" alt="" /> Visit
+                         </button>
+                          <button class="action-item">
+                           <img src="./assets/images/icon-copy.svg" alt="" /> Copy URL
+                         </button>
+                         <button class="action-item">
+                           <img src="./assets/images/icon-pin.svg" alt="" /> ${bookmark.pinned ? "Unpin" : "Pin"}
+                          </button>
+                          <button class="action-item">
+                           <img src="
+                           ./assets/images/icon-edit.svg" alt="" /> Edit
+                         </button>
+                          <button class="action-item">
+                           <img src="./assets/images/icon-archive.svg" alt="" /> Archive
+                         </button>  
+                    </div>
                   </div>
                 </div>
                 <div class="card-content">
@@ -256,27 +274,27 @@ searchInput.addEventListener("input", function (event) {
 
 function tagSearchFn(searchTerm) {
   const filterbookmarks = bookmarks.filter((bookmark) =>
-    bookmark.tags.some((tag) => tag.toLowerCase() === searchTerm.toLowerCase())
+    bookmark.tags.some((tag) => tag.toLowerCase() === searchTerm.toLowerCase()),
   );
   renderBookmarksFn(filterbookmarks);
 }
 sidebarContainer.addEventListener("change", function (event) {
   const target = event.target;
   console.log(target);
-  let selectedTags =[];
-  if (!target.matches('.tag-checkbox')) return; // ignore other changes
-  document.querySelectorAll('.tag-checkbox').forEach((checkbox) => {
-    if(checkbox.checked){
+  let selectedTags = [];
+  if (!target.matches(".tag-checkbox")) return; // ignore other changes
+  document.querySelectorAll(".tag-checkbox").forEach((checkbox) => {
+    if (checkbox.checked) {
       selectedTags.push(checkbox.value);
     }
   });
   console.log(selectedTags);
-  if(selectedTags.length === 0){
+  if (selectedTags.length === 0) {
     renderBookmarksFn(bookmarks);
     return;
   }
-  const selectedTagsBookmarks= bookmarks.filter((bookmark) =>
-    bookmark.tags.some((tag) => selectedTags.includes(tag))
+  const selectedTagsBookmarks = bookmarks.filter((bookmark) =>
+    bookmark.tags.some((tag) => selectedTags.includes(tag)),
   );
   renderBookmarksFn(selectedTagsBookmarks);
 });
@@ -286,33 +304,40 @@ sortByBtn.addEventListener("click", function () {
   sortOptions.classList.toggle("active");
 });
 // Handling the outside click for sort by options dropdown
-document.addEventListener("click", function (event) { 
+document.addEventListener("click", function (event) {
   const sortOptions = document.querySelector(".sortBy-options");
-  if (!sortByBtn.contains(event.target) && !sortOptions.contains(event.target)) {
+  if (
+    !sortByBtn.contains(event.target) &&
+    !sortOptions.contains(event.target)
+  ) {
     sortOptions.classList.remove("active");
   }
 });
 
 //SORT FUNCTIONALITY
-sortByOptions.addEventListener("click", function(event){
- const btn = event.target.closest('.filter-btns-btn')  // always the button
-  if(!btn) return
+sortByOptions.addEventListener("click", function (event) {
+  const btn = event.target.closest(".filter-btns-btn"); // always the button
+  if (!btn) return;
 
-  const sortValues =['recently_added','recently_visited','most_visited'];
-  document.querySelectorAll('.filter-btns-btn').forEach((btn) => {
-    btn.classList.remove('active');
+  const sortValues = ["recently_added", "recently_visited", "most_visited"];
+  document.querySelectorAll(".filter-btns-btn").forEach((btn) => {
+    btn.classList.remove("active");
   });
-  btn.classList.add('active');
+  btn.classList.add("active");
 
-  if(!sortValues.includes(btn.value)) return;
+  if (!sortValues.includes(btn.value)) return;
 
   let sortedBookmarks = [...bookmarks];
-  if(btn.value === 'recently_added'){
-    sortedBookmarks.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
-  } else if(btn.value === 'recently_visited'){
-    sortedBookmarks.sort((a,b) => new Date(b.lastVisited) - new Date(a.lastVisited));
-  } else if(btn.value === 'most_visited'){
-    sortedBookmarks.sort((a,b) => b.visitCount - a.visitCount);
+  if (btn.value === "recently_added") {
+    sortedBookmarks.sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+    );
+  } else if (btn.value === "recently_visited") {
+    sortedBookmarks.sort(
+      (a, b) => new Date(b.lastVisited) - new Date(a.lastVisited),
+    );
+  } else if (btn.value === "most_visited") {
+    sortedBookmarks.sort((a, b) => b.visitCount - a.visitCount);
   }
   renderBookmarksFn(sortedBookmarks);
 });
@@ -326,7 +351,7 @@ cancelBtn.addEventListener("click", closeAddBookmarkModal);
 
 closeModalBtn.addEventListener("click", closeAddBookmarkModal);
 
-function closeAddBookmarkModal(){
+function closeAddBookmarkModal() {
   addBookmarkModal.classList.remove("active");
 }
 const descriptionInput = document.getElementById("description");
@@ -342,109 +367,121 @@ bookmarkForm.addEventListener("submit", function (event) {
   const title = document.getElementById("title").value.trim();
   const description = document.getElementById("description").value.trim();
   const websiteUrl = document.getElementById("websiteUrl").value.trim();
-  const tags = document.getElementById("tags").value.trim().split(",").map(tag => tag.trim()).filter(tag => tag !== "")
+  const tags = document
+    .getElementById("tags")
+    .value.trim()
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter((tag) => tag !== "");
   // Validate the form inputs
   // Validate the title input
-const titleError = document.getElementById("titleError");
-let isValid = true;
+  const titleError = document.getElementById("titleError");
+  let isValid = true;
 
-if (!title) {
-  titleError.textContent = "Title is required";
-  isValid = false;
-} else if (title.length < 3) {
-  titleError.textContent = "Title must be at least 3 characters";
-  isValid = false;
-} else if (title.length > 60) {
-  titleError.textContent = "Title must be under 60 characters";
-  isValid = false;
-} else if (/[<>]/.test(title)) {
-  titleError.textContent = "Title cannot contain < or > characters";
-  isValid = false;
-} else if (bookmarks.some(b => b.title.toLowerCase() === title.toLowerCase())) {
-  titleError.textContent = "A bookmark with this title already exists";
-  isValid = false;
-} else {
-  titleError.textContent = "";
-}
-
-// validate the description input
-const descriptionError = document.getElementById("descriptionError");
-if (!description) {
-  descriptionError.textContent = "Description is required";
-  isValid = false;
-} else if(description.length < 10) {
-  descriptionError.textContent = "Description must be at least 10 characters";
-  isValid = false;
-} else if (description.length > 280) {
-  descriptionError.textContent = "Description must be under 280 characters";
-  isValid = false;
-} else if (/[<>]/.test(description)) {
-  descriptionError.textContent = "Description cannot contain < or > characters";
-  isValid = false;
-}
- else {
-  descriptionError.textContent = "";
-}
-// websiteUrl validation
-let webSiteUrlError = document.getElementById("websiteUrlError");
-if(!websiteUrl) {
-  webSiteUrlError.textContent = "Website URL is required";
-  isValid = false;
-} else if(!/^https?:\/\/.+$/.test(websiteUrl)) {
-  webSiteUrlError.textContent = "Please enter a valid website URL";
-  isValid = false;
-}
-else {
-  webSiteUrlError.textContent = "";
-}
-
-let favicon;
-try {
-  const domain = new URL(websiteUrl).hostname;
-  favicon = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
-} catch {
-  favicon = "./assets/images/default-favicon.png"; // fallback
-}
-
-//Tags validation
-let tagsError = document.getElementById("tagsError");
-let hasDuplicate = tags.some((tag,index)=> tags.indexOf(tag) !== index);
- if(tags.length === 0){
-   tagsError.textContent = "Atleast one tag is required"
-   isValid =false;
- } else if (hasDuplicate){
-   tagsError.textContent = "duplicate tags are not allowed ."
-   isValid = false;
- } else if(tags.length>5){
-   tagsError.textContent = "Max 5 tags are allowed"
-   isValid = false;
+  if (!title) {
+    titleError.textContent = "Title is required";
+    isValid = false;
+  } else if (title.length < 3) {
+    titleError.textContent = "Title must be at least 3 characters";
+    isValid = false;
+  } else if (title.length > 60) {
+    titleError.textContent = "Title must be under 60 characters";
+    isValid = false;
+  } else if (/[<>]/.test(title)) {
+    titleError.textContent = "Title cannot contain < or > characters";
+    isValid = false;
+  } else if (
+    bookmarks.some((b) => b.title.toLowerCase() === title.toLowerCase())
+  ) {
+    titleError.textContent = "A bookmark with this title already exists";
+    isValid = false;
+  } else {
+    titleError.textContent = "";
   }
- else {
-   tagsError.textContent ="";
- }
- 
- // Form submission validation
- if (isValid) {
-  const bookmark = {
-    id: `bm-${Date.now()}`,
-    title,
-    url: websiteUrl,
-    favicon,
-    description,
-    tags,
-    pinned: false,
-    isArchived: false,
-    visitCount: 0,
-    createdAt: new Date().toISOString(),
-    lastVisited: null
-  };
 
-  bookmarks.push(bookmark);
-  closeAddBookmarkModal();
-  renderBookmarksFn(bookmarks);
-  rendersidebarTags(bookmarks);
-  bookmarkForm.reset();
-  document.querySelector(".char-count").textContent = "0/280";
-}
-}
-);
+  // validate the description input
+  const descriptionError = document.getElementById("descriptionError");
+  if (!description) {
+    descriptionError.textContent = "Description is required";
+    isValid = false;
+  } else if (description.length < 10) {
+    descriptionError.textContent = "Description must be at least 10 characters";
+    isValid = false;
+  } else if (description.length > 280) {
+    descriptionError.textContent = "Description must be under 280 characters";
+    isValid = false;
+  } else if (/[<>]/.test(description)) {
+    descriptionError.textContent =
+      "Description cannot contain < or > characters";
+    isValid = false;
+  } else {
+    descriptionError.textContent = "";
+  }
+  // websiteUrl validation
+  let webSiteUrlError = document.getElementById("websiteUrlError");
+  if (!websiteUrl) {
+    webSiteUrlError.textContent = "Website URL is required";
+    isValid = false;
+  } else if (!/^https?:\/\/.+$/.test(websiteUrl)) {
+    webSiteUrlError.textContent = "Please enter a valid website URL";
+    isValid = false;
+  } else {
+    webSiteUrlError.textContent = "";
+  }
+
+  let favicon;
+  try {
+    const domain = new URL(websiteUrl).hostname;
+    favicon = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+  } catch {
+    favicon = "./assets/images/default-favicon.png"; // fallback
+  }
+
+  //Tags validation
+  let tagsError = document.getElementById("tagsError");
+  let hasDuplicate = tags.some((tag, index) => tags.indexOf(tag) !== index);
+  if (tags.length === 0) {
+    tagsError.textContent = "Atleast one tag is required";
+    isValid = false;
+  } else if (hasDuplicate) {
+    tagsError.textContent = "duplicate tags are not allowed .";
+    isValid = false;
+  } else if (tags.length > 5) {
+    tagsError.textContent = "Max 5 tags are allowed";
+    isValid = false;
+  } else {
+    tagsError.textContent = "";
+  }
+
+  // Form submission validation
+  if (isValid) {
+    const bookmark = {
+      id: `bm-${Date.now()}`,
+      title,
+      url: websiteUrl,
+      favicon,
+      description,
+      tags,
+      pinned: false,
+      isArchived: false,
+      visitCount: 0,
+      createdAt: new Date().toISOString(),
+      lastVisited: null,
+    };
+
+    bookmarks.push(bookmark);
+    closeAddBookmarkModal();
+    renderBookmarksFn(bookmarks);
+    rendersidebarTags(bookmarks);
+    bookmarkForm.reset();
+    document.querySelector(".char-count").textContent = "0/280";
+  }
+});
+
+bookmarkContainer.addEventListener("click", function(event) {
+  const editBtn = event.target.closest(".edit-dtls");
+  if (!editBtn) return;
+  
+  const actionMenu = editBtn.querySelector(".card-actions-menu");
+  actionMenu.classList.toggle("active");
+});
