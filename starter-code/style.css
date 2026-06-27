@@ -477,3 +477,52 @@ body {
   font-size: 12px;
   margin-top: 4px;
 }
+.edit-dtls {
+  position: relative;
+  cursor: pointer;
+}
+
+.card-actions-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  display: none;
+  flex-direction: column;
+  min-width: 180px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  padding: 8px;
+  z-index: 10;
+}
+
+.card-actions-menu.active {
+  display: flex;
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: none;
+  background: none;
+  font-family: "Manrope", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0f1f1e;
+  text-align: left;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.action-item:hover {
+  background-color: #e8f0ef;
+}
+
+.action-item img {
+  width: 18px;
+  height: 18px;
+}
