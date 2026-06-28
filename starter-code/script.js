@@ -501,5 +501,14 @@ bookmarkContainer.addEventListener("click", function(event){
   //Action Menu Implementation
   if(action === "visit"){
     window.open(bookmarkCard.url,"_blank")
+  }else if (action === "copy"){
+    navigator.clipboard.writeText(bookmarkCard.url)
+    .then(()=>{
+      console.log("Url copied successfully");
+    })
+    .catch(()=>{
+      console.log("Error in the copyig the URL to the clipboard");
+    })
+
   }
 })
