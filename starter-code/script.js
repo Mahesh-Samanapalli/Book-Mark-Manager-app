@@ -8,10 +8,21 @@ const addBookmarkBtn = document.getElementById("addBookmarkBtn");
 const cancelBtn = document.getElementById("cancelBtn");
 const closeModalBtn = document.getElementById("closeBtn");
 const bookmarkForm = document.getElementById("addBookmarkForm");
+const homeState = document.getElementById("homeState");
+const archiveState = document.getElementById("archivedState");
 
 
 let bookmarks = []; // Global variable to store bookmarks data
 let selectedBookmarkCardId;
+let currentView = "home";
+
+function getVisibleBookmarks(){
+  if(currentView === "home"){
+    return bookmarks.filter(b=>!b.isArchived);
+  }else{
+    return bookmarks.filter(b=>b.isArchived);
+  }
+}
 async function fetchBookmarks() {
   try {
     // Fetch the data from the JSON file
@@ -26,7 +37,7 @@ async function fetchBookmarks() {
     console.log(bookmarks);
     // Call the function to render bookmarks
     // renderBookmarks(bookmarks)''
-    renderBookmarksFn(bookmarks);
+    renderBookmarksFn(getVisibleBookmarks());
     rendersidebarTags(bookmarks);
   } catch (error) {
     console.error("Error fetching bookmarks:", error);
@@ -110,6 +121,7 @@ function formatDate(dateString) {
 // fetch renderBookmarks with functional programming approach
 
 function renderBookmarksFn(bookmarks) {
+  console.log(bookmarks)
   const cardsHtml = bookmarks
     .map((bookmark) => createBookmarkCard(bookmark))
     .join("");
@@ -548,5 +560,31 @@ bookmarkContainer.addEventListener("click", function(event){
     document.getElementById("modalHeading").textContent ="Edit Bookmark"
     document.getElementById("modalInfo").textContent ="Update your saved link details - change the title ,description,URL or tags anytime."
     document.getElementById("submitButton").textContent ="save bookmark"
+  }else if(action === "pin" || action === "unpin"){
+     for(let i=0;i<bookmarks.length;i++){
+       if(bookmarks[i].id === bookmarkId){
+          bookmarks[i].pinned = !bookmarks[i].pinned;
+         renderBookmarksFn(bookmarks);
+         return;
+       }
+     }
+  }else if (action ==="archive"){
+     for(let i=0;i<bookmarks.length;i++){
+       if(bookmarks[i].id === bookmarkId){
+        bookmarks[i].isArchived = !bookmarks[i].isArchived;
+        currentView = "home";
+        renderBookmarksFn(getVisibleBookmarks());
+        return;
+       }
+     }
   }
+})
+
+homeState.addEventListener("click",function(){
+  currentView = "home";
+  renderBookmarksFn(getVisibleBookmarks());
+})
+archiveState.addEventListener("click",function(){
+  currentView = "archive";
+  renderBookmarksFn(getVisibleBookmarks());
 })
