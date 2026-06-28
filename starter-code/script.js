@@ -136,20 +136,20 @@ function createBookmarkCard(bookmark) {
                   <div class="edit-dtls">
                     <img src="./assets/images/icon-menu-bookmark.svg" alt="" />
                     <div class="card-actions-menu">
-                         <button class="action-item">
+                         <button class="action-item" data-action="visit">
                            <img src="./assets/images/icon-visit.svg" alt="" /> Visit
                          </button>
-                          <button class="action-item">
+                          <button class="action-item" data-action="copy">
                            <img src="./assets/images/icon-copy.svg" alt="" /> Copy URL
                          </button>
-                         <button class="action-item">
+                         <button class="action-item" data-action="${bookmark.pinned ? 'unpin' : 'pin'}">
                            <img src="./assets/images/icon-pin.svg" alt="" /> ${bookmark.pinned ? "Unpin" : "Pin"}
                           </button>
-                          <button class="action-item">
+                          <button class="action-item" data-action="edit">
                            <img src="
                            ./assets/images/icon-edit.svg" alt="" /> Edit
                          </button>
-                          <button class="action-item">
+                          <button class="action-item" data-action="archive">
                            <img src="./assets/images/icon-archive.svg" alt="" /> Archive
                          </button>  
                     </div>
@@ -495,6 +495,11 @@ bookmarkContainer.addEventListener("click", function(event){
   const bookmark = event.target.closest(".bookmark-card");
   console.log(bookmark)
   const bookmarkId = bookmark.dataset.id;
-  console.log(`bookmark id is : ${bookmarkId}`);
-
+  const action = actionMenu.dataset.action;
+  const bookmarkCard = bookmarks.find(b=>b.id === bookmarkId);
+  console.log(bookmarkId,action);
+  //Action Menu Implementation
+  if(action === "visit"){
+    window.open(bookmarkCard.url,"_blank")
+  }
 })
