@@ -40,8 +40,9 @@ function renderBookmarks(bookmarks) {
   for (let i = 0; i < bookmarks.length; i++) {
     let bookmark = bookmarks[i];
     console.log(bookmark);
+     console.log("Creating card for:", bookmark.id);  
     cardsHtml += `
-          <div class="bookmark-card">
+          <div class="bookmark-card" data-id="${bookmark.id}">
               <div class="card-main-cnt">
                 <div class="card-header">
                   <div class="card-logo">
@@ -115,7 +116,8 @@ function renderBookmarksFn(bookmarks) {
 }
 
 function createBookmarkCard(bookmark) {
-  return `<div class="bookmark-card">
+   console.log("Creating card for:", bookmark.id);  
+  return `<div class="bookmark-card" data-id="${bookmark.id}">
               <div class="card-main-cnt">
                 <div class="card-header">
                   <div class="card-logo">
@@ -485,3 +487,14 @@ bookmarkContainer.addEventListener("click", function(event) {
   const actionMenu = editBtn.querySelector(".card-actions-menu");
   actionMenu.classList.toggle("active");
 });
+
+bookmarkContainer.addEventListener("click", function(event){
+  const actionMenu = event.target.closest(".action-item");
+  if(!actionMenu) return;
+
+  const bookmark = event.target.closest(".bookmark-card");
+  console.log(bookmark)
+  const bookmarkId = bookmark.dataset.id;
+  console.log(`bookmark id is : ${bookmarkId}`);
+
+})
