@@ -9,7 +9,9 @@ const cancelBtn = document.getElementById("cancelBtn");
 const closeModalBtn = document.getElementById("closeBtn");
 const bookmarkForm = document.getElementById("addBookmarkForm");
 
+
 let bookmarks = []; // Global variable to store bookmarks data
+let selectedBookmarkCardId;
 async function fetchBookmarks() {
   try {
     // Fetch the data from the JSON file
@@ -40,8 +42,9 @@ function renderBookmarks(bookmarks) {
   for (let i = 0; i < bookmarks.length; i++) {
     let bookmark = bookmarks[i];
     console.log(bookmark);
+     console.log("Creating card for:", bookmark.id);  
     cardsHtml += `
-          <div class="bookmark-card">
+          <div class="bookmark-card" data-id="${bookmark.id}">
               <div class="card-main-cnt">
                 <div class="card-header">
                   <div class="card-logo">
@@ -115,7 +118,8 @@ function renderBookmarksFn(bookmarks) {
 }
 
 function createBookmarkCard(bookmark) {
-  return `<div class="bookmark-card">
+   console.log("Creating card for:", bookmark.id);  
+  return `<div class="bookmark-card" data-id="${bookmark.id}">
               <div class="card-main-cnt">
                 <div class="card-header">
                   <div class="card-logo">
@@ -134,20 +138,20 @@ function createBookmarkCard(bookmark) {
                   <div class="edit-dtls">
                     <img src="./assets/images/icon-menu-bookmark.svg" alt="" />
                     <div class="card-actions-menu">
-                         <button class="action-item">
+                         <button class="action-item" data-action="visit">
                            <img src="./assets/images/icon-visit.svg" alt="" /> Visit
                          </button>
-                          <button class="action-item">
+                          <button class="action-item" data-action="copy">
                            <img src="./assets/images/icon-copy.svg" alt="" /> Copy URL
                          </button>
-                         <button class="action-item">
+                         <button class="action-item" data-action="${bookmark.pinned ? 'unpin' : 'pin'}">
                            <img src="./assets/images/icon-pin.svg" alt="" /> ${bookmark.pinned ? "Unpin" : "Pin"}
                           </button>
-                          <button class="action-item">
+                          <button class="action-item" data-action="edit">
                            <img src="
                            ./assets/images/icon-edit.svg" alt="" /> Edit
                          </button>
-                          <button class="action-item">
+                          <button class="action-item" data-action="archive">
                            <img src="./assets/images/icon-archive.svg" alt="" /> Archive
                          </button>  
                     </div>
@@ -353,6 +357,10 @@ closeModalBtn.addEventListener("click", closeAddBookmarkModal);
 
 function closeAddBookmarkModal() {
   addBookmarkModal.classList.remove("active");
+  bookmarkForm.reset();
+  document.getElementById("submitButton").textContent ="Add bookmark"
+  document.getElementById("modalHeading").textContent ="Add Bookmark"
+  document.getElementById("modalInfo").textContent ="Save a link with details to keep your collection organized. We exract the favicon automatically from the URL"
 }
 const descriptionInput = document.getElementById("description");
 descriptionInput.addEventListener("input", function () {
@@ -455,7 +463,11 @@ bookmarkForm.addEventListener("submit", function (event) {
 
   // Form submission validation
   if (isValid) {
-    const bookmark = {
+
+    console.log(document.getElementById("submitButton").textContent)
+
+    if(document.getElementById("submitButton").textContent === "Add Bookmark"){
+     const bookmark = {
       id: `bm-${Date.now()}`,
       title,
       url: websiteUrl,
@@ -467,15 +479,32 @@ bookmarkForm.addEventListener("submit", function (event) {
       visitCount: 0,
       createdAt: new Date().toISOString(),
       lastVisited: null,
-    };
+     };
 
-    bookmarks.push(bookmark);
-    closeAddBookmarkModal();
-    renderBookmarksFn(bookmarks);
-    rendersidebarTags(bookmarks);
-    bookmarkForm.reset();
-    document.querySelector(".char-count").textContent = "0/280";
+     bookmarks.push(bookmark);
+     closeAddBookmarkModal();
+     renderBookmarksFn(bookmarks);
+     rendersidebarTags(bookmarks);
+     bookmarkForm.reset();
+     document.querySelector(".char-count").textContent = "0/280";
+     }
+     else{
+      const bookmark = bookmarks.find(b=>b.id === selectedBookmarkCardId);
+      bookmark.title =title;
+      bookmark.description=description;
+      bookmark.tags =tags;
+      bookmark.url= websiteUrl;
+      closeAddBookmarkModal();
+      renderBookmarksFn(bookmarks);
+      rendersidebarTags(bookmarks);
+      bookmarkForm.reset();
+      document.getElementById("submitButton").textContent ="Add bookmark"
+      document.getElementById("modalHeading").textContent ="Add Bookmark"
+      document.getElementById("modalInfo").textContent ="Save a link with details to keep your collection organized. We exract the favicon automatically from the URL"
+     }
+
   }
+  
 });
 
 bookmarkContainer.addEventListener("click", function(event) {
@@ -485,3 +514,39 @@ bookmarkContainer.addEventListener("click", function(event) {
   const actionMenu = editBtn.querySelector(".card-actions-menu");
   actionMenu.classList.toggle("active");
 });
+
+// Action drop down functionality !
+bookmarkContainer.addEventListener("click", function(event){
+  const actionMenu = event.target.closest(".action-item");
+  if(!actionMenu) return;
+
+  const bookmark = event.target.closest(".bookmark-card");
+  console.log(bookmark)
+  const bookmarkId = bookmark.dataset.id;
+  selectedBookmarkCardId = bookmarkId;
+  const action = actionMenu.dataset.action;
+  const bookmarkCard = bookmarks.find(b=>b.id === bookmarkId);
+  console.log(bookmarkId,action);
+  //Action Menu Implementation
+  if(action === "visit"){
+    window.open(bookmarkCard.url,"_blank")
+  }else if (action === "copy"){
+    navigator.clipboard.writeText(bookmarkCard.url)
+    .then(()=>{
+      console.log("Url copied successfully");
+    })
+    .catch(()=>{
+      console.log("Error in the copyig the URL to the clipboard");
+    })
+  }else if (action === 'edit'){
+    addBookmarkModal.classList.add("active");
+    const title = document.getElementById("title");
+    document.getElementById("title").value = bookmarkCard.title;
+    document.getElementById("description").value = bookmarkCard.description;
+    document.getElementById("websiteUrl").value = bookmarkCard.url;
+    document.getElementById("tags").value = bookmarkCard.tags.join(", ");
+    document.getElementById("modalHeading").textContent ="Edit Bookmark"
+    document.getElementById("modalInfo").textContent ="Update your saved link details - change the title ,description,URL or tags anytime."
+    document.getElementById("submitButton").textContent ="save bookmark"
+  }
+})
