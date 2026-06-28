@@ -9,7 +9,9 @@ const cancelBtn = document.getElementById("cancelBtn");
 const closeModalBtn = document.getElementById("closeBtn");
 const bookmarkForm = document.getElementById("addBookmarkForm");
 
+
 let bookmarks = []; // Global variable to store bookmarks data
+let selectedBookmarkCardId;
 async function fetchBookmarks() {
   try {
     // Fetch the data from the JSON file
@@ -355,6 +357,10 @@ closeModalBtn.addEventListener("click", closeAddBookmarkModal);
 
 function closeAddBookmarkModal() {
   addBookmarkModal.classList.remove("active");
+  bookmarkForm.reset();
+  document.getElementById("submitButton").textContent ="Add bookmark"
+  document.getElementById("modalHeading").textContent ="Add Bookmark"
+  document.getElementById("modalInfo").textContent ="Save a link with details to keep your collection organized. We exract the favicon automatically from the URL"
 }
 const descriptionInput = document.getElementById("description");
 descriptionInput.addEventListener("input", function () {
@@ -457,7 +463,11 @@ bookmarkForm.addEventListener("submit", function (event) {
 
   // Form submission validation
   if (isValid) {
-    const bookmark = {
+
+    console.log(document.getElementById("submitButton").textContent)
+
+    if(document.getElementById("submitButton").textContent === "Add Bookmark"){
+     const bookmark = {
       id: `bm-${Date.now()}`,
       title,
       url: websiteUrl,
@@ -469,15 +479,32 @@ bookmarkForm.addEventListener("submit", function (event) {
       visitCount: 0,
       createdAt: new Date().toISOString(),
       lastVisited: null,
-    };
+     };
 
-    bookmarks.push(bookmark);
-    closeAddBookmarkModal();
-    renderBookmarksFn(bookmarks);
-    rendersidebarTags(bookmarks);
-    bookmarkForm.reset();
-    document.querySelector(".char-count").textContent = "0/280";
+     bookmarks.push(bookmark);
+     closeAddBookmarkModal();
+     renderBookmarksFn(bookmarks);
+     rendersidebarTags(bookmarks);
+     bookmarkForm.reset();
+     document.querySelector(".char-count").textContent = "0/280";
+     }
+     else{
+      const bookmark = bookmarks.find(b=>b.id === selectedBookmarkCardId);
+      bookmark.title =title;
+      bookmark.description=description;
+      bookmark.tags =tags;
+      bookmark.url= websiteUrl;
+      closeAddBookmarkModal();
+      renderBookmarksFn(bookmarks);
+      rendersidebarTags(bookmarks);
+      bookmarkForm.reset();
+      document.getElementById("submitButton").textContent ="Add bookmark"
+      document.getElementById("modalHeading").textContent ="Add Bookmark"
+      document.getElementById("modalInfo").textContent ="Save a link with details to keep your collection organized. We exract the favicon automatically from the URL"
+     }
+
   }
+  
 });
 
 bookmarkContainer.addEventListener("click", function(event) {
@@ -488,6 +515,7 @@ bookmarkContainer.addEventListener("click", function(event) {
   actionMenu.classList.toggle("active");
 });
 
+// Action drop down functionality !
 bookmarkContainer.addEventListener("click", function(event){
   const actionMenu = event.target.closest(".action-item");
   if(!actionMenu) return;
@@ -495,6 +523,7 @@ bookmarkContainer.addEventListener("click", function(event){
   const bookmark = event.target.closest(".bookmark-card");
   console.log(bookmark)
   const bookmarkId = bookmark.dataset.id;
+  selectedBookmarkCardId = bookmarkId;
   const action = actionMenu.dataset.action;
   const bookmarkCard = bookmarks.find(b=>b.id === bookmarkId);
   console.log(bookmarkId,action);
@@ -509,6 +538,15 @@ bookmarkContainer.addEventListener("click", function(event){
     .catch(()=>{
       console.log("Error in the copyig the URL to the clipboard");
     })
-
+  }else if (action === 'edit'){
+    addBookmarkModal.classList.add("active");
+    const title = document.getElementById("title");
+    document.getElementById("title").value = bookmarkCard.title;
+    document.getElementById("description").value = bookmarkCard.description;
+    document.getElementById("websiteUrl").value = bookmarkCard.url;
+    document.getElementById("tags").value = bookmarkCard.tags.join(", ");
+    document.getElementById("modalHeading").textContent ="Edit Bookmark"
+    document.getElementById("modalInfo").textContent ="Update your saved link details - change the title ,description,URL or tags anytime."
+    document.getElementById("submitButton").textContent ="save bookmark"
   }
 })

@@ -74,8 +74,8 @@
     <div class="addBookmarkModal" id="addBookmarkModal">
       <div class="modal-content">
         <div class="model-header">
-           <h2>Add a Bookmark</h2>
-           <p>Save a link with details to keep your collection organized. We exract the favicon automatically from the URL</p>
+           <h2 id="modalHeading">Add a Bookmark</h2>
+           <p id="modalInfo">Save a link with details to keep your collection organized. We exract the favicon automatically from the URL</p>
            <span class="close-btn" id="closeBtn">&times;</span>
         </div>
         <div class="modal-body">
@@ -103,7 +103,7 @@
             </div>
             <div class="action-btns">
               <button type="button" id="cancelBtn">Cancel</button>
-              <button class="submit-btn" type="submit">Add Bookmark</button>
+              <button class="submit-btn" id="submitButton" type="submit">Add Bookmark</button>
             </div>
           </form>
         </div>
