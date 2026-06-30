@@ -284,6 +284,7 @@ searchInput.addEventListener("input", function (event) {
     }
   }
   console.log(searchTerm);
+  console.log(searchTerm);
   console.log(filterbookmarks);
   renderBookmarksFn(filterbookmarks);
 });
